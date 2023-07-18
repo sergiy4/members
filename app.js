@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 require('dotenv').config()
-// git@github.com:sergiy4/members.git
+// 
 const indexRouter = require('./routes/index');
 const registerRouter = require('./routes/registerRouter')
 
