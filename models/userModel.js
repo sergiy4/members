@@ -21,10 +21,12 @@ const UserSchema = new Schema({
         maxLength:100,
         required:true,
     },
-    password:{
+    // Якби ми використовували іншу бібліотеку для хешуваання
+    // то мали б зберігати ще й сіль , але якщоо
+    // використовувати bcrypt в цьому нема потреби , бо сіль зберігається
+    // в хеші
+    hash:{
         type:String,
-        minLength:5,
-        maxLength:100,
         required:true,
     },
     member:{

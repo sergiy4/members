@@ -1,7 +1,7 @@
 const UserModel = require('../models/userModel')
 const asyncHandler = require('express-async-handler')
 const {body, validationResult} = require('express-validator')
-
+const bcrypt = require('bcrypt')
 
 const get_register_form = asyncHandler(async(req,res,next)=>{
     console.log('here')
@@ -15,34 +15,26 @@ const post_register_form = [
         .trim()
         .isLength({min:1 , max:100})
         .withMessage('first name must be specified')
-        .escape(),
+        .escape()
+        .matches(/^[A-Za-z]+$/, 'g'),
 
     body('last_name')
         .trim()
         .isLength({min:1 , max:100})
-        .withMessage('first name must be specified')
-        .escape(),
+        .withMessage('last name must be specified')
+        .escape()
+        .matches(/^[A-Za-z]+$/, 'g'),
     
     body('username')
         .trim()
         .isLength({min:1 , max:100})
         .withMessage('first name must be specified')
         .escape()
+        .matches(/^[A-Za-z0-9_]+$/)
         .custom(async (value)=>{
-
-            const user = await UserModel({username: value})
-
-            if(user){
-                throw new Error('Username already in use')
-            }
-        })
-        .custom((value)=>{
-            const pattern = /^[A-Za-z0-9_]+$/
-
-            const isValid = pattern.test(value)
-
-            if(!isValid){
-                throw new Error('invalid characters')
+            const user = await UserModel.findOne({ username: value });
+            if (user) {
+                throw new Error('Username already in use');
             }
         }),
     
@@ -51,16 +43,8 @@ const post_register_form = [
         .isLength({min:5 , max:100})
         .withMessage('password name must be specified')
         .escape()
-        .custom((val)=>{
-
-            const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$])[A-Za-z\d@#$]+$/;
-
-            const isValid = pattern.test(val)
-
-            if(!isValid){
-                throw new Error('Password must contain uppercase letters, lowercase letters, numbers and special characters')
-            }
-        }),
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$])[A-Za-z\d@#$]+$/, 'g')
+        ,
     
     body('passwordConfirmation')
         .trim()
@@ -74,27 +58,39 @@ const post_register_form = [
     asyncHandler(async(req,res,next)=>{
         
         const errors = validationResult(req)
-
-        const user = new UserModel({
+        // console.log(errors)
+        const user = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             username: req.body.username,
-            password: req.body.password,
             member: req.body.member
-        })
+        }
+
+        console.log(errors)
 
         if(!errors.isEmpty()){
 
             res.render('register_form',{
                 title:'Sign up',
-                user
+                user,
+                errors:errors.array()
             })
             return;
 
         } else {
-            await user.save();
+            const hashPwd =await bcrypt.hash(req.body.password, 10);
+
+            const newUser = new UserModel({
+                ...user,
+                hash:hashPwd,
+            })
+
+            await newUser.save();
             // Перевести до сторінки автентифікації
+
+            res.redirect('/log-in')
         }
+    
     })
 ]
 

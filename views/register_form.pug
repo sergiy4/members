@@ -1,19 +1,54 @@
 extends layout 
 block content 
-  h1=title
+  
 
   form(action='' method='post')
+    h1=title
 
-    label(for='first_name') First name 
-    input#first_name(type="text", name="first_name" required :true value=(undefined === user ? '': user.first_name))
+    div.oneField
+      label(for='first_name') First name 
+      input#first_name(type="text", name="first_name" required=true value=(undefined === user ? '': user.first_name))
+      if errors
+        for error in errors
+          if(error.path==='first_name')
+            p.error_text=error.msg
+            - break
+         
 
-    label(for='last_name') Last name 
-    input#last_name(type="text", name="last_name" required :true value=(undefined === user ? '': user.last_name))
+    div.oneField
+      label(for='last_name') Last name 
+      input#last_name(type="text", name="last_name" required=true value=(undefined === user ? '': user.last_name))
+      if errors
+        for error in errors
+          if(error.path==='last_name')
+            p.error_text=error.msg
+            - break
 
-    label(for='first_name') Username
-    input#username(type="text", name="username" required :true value=(undefined === user ? '': user.username))
+    div.oneField
+      label(for='first_name') Username
+      input#username(type="text", name="username" required=true value=(undefined === user ? '': user.username))
+      if errors
+        for error in errors
+          if(error.path==='username')
+            p.error_text=error.msg
+            - break
 
-    label(for='first_name') First name 
-    input#first_name(type="text", name="first_name" required :true value=(undefined === user ? '': user.first_name))
+    div.oneField
+      label(for='first_name') Password 
+      input#password(type="password", name="password" required=true )
+      if errors
+        for error in errors
+          if(error.path==='password')
+            p.error_text=error.msg
+            - break
+
+    div.oneField  
+      label(for='first_name') Password Confirmation
+      input#passwordConfirmation(type="password", name="passwordConfirmation" required=true )
+      if errors
+        for error in errors
+          if(error.path==='passportConfirmation')
+            p.error_text=error.msg
+            - break
 
     button.btn.btn-primary(type='submit') Sign up
