@@ -7,10 +7,17 @@ block content
   -if(user)
     a(href='/log-out') Log out 
     a(href='/post') Create post
-    a(href='/post') Become a member
+    a(href='/member') Become a member
   -else 
     a(href='/register') Sign up 
     a(href='/log-in') log in
   
+  for post in posts 
+    div.onePost
+      h1=post.header 
+      h2=post.text  
+      -if(user && user.member)
+        p=post.author.username
+        p=post.date_publication
   //- тут показувати всі пости , і в залежності 
   //- від прав показувати хто їх написав

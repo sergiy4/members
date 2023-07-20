@@ -5,11 +5,14 @@ const Post = require('../models/postModel')
 
 const get_main_page = asyncHandler(async(req,res,next)=>{
 
-    // const posts = await Post.find({}).exec();
+    const posts = await Post.find({}).populate('author').exec();
+    
   
+
     res.render('index',{
         title:'Main page',
-       user:req.user
+        user:req.user,
+        posts
     })
 })
 

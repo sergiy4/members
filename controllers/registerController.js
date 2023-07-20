@@ -6,7 +6,8 @@ const bcrypt = require('bcrypt')
 const get_register_form = asyncHandler(async(req,res,next)=>{
     console.log('here')
     res.render('register_form',{
-        title:'Sign up'
+        title:'Sign up',
+        user:req.user
     })
 })
 

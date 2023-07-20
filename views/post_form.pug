@@ -1,0 +1,26 @@
+extends layout 
+block content 
+
+  form(action='' method='post')
+    h1=title
+
+    div.oneField
+      label(for='header') Header 
+      input#header(type="text", name="header" required=true value=(undefined === post ? '': post.header))
+      if errors
+        for error in errors
+          if(error.path==='header')
+            p.error_text=error.msg
+            - break
+         
+
+    div.oneField
+      label(for='text') Text
+      input#text(type="text", name="text" required=true  value=(undefined === post ? '': post.text))
+      if errors
+        for error in errors
+          if(error.path==='text')
+            p.error_text=error.msg
+            - break
+
+    button.btn.btn-primary(type='submit') Create post

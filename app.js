@@ -13,7 +13,14 @@ const mainRouter = require('./routes/mainRoute')
 const registerRouter = require('./routes/registerRouter')
 const LogInRouter = require('./routes/authRouter')
 const logOutRouter = require('./routes/logoutRouter')
-var app = express();
+const postRouter = require('./routes/postRouter')
+const membersRouter = require('./routes/membersRouter')
+
+// auth middleware require
+
+const {isAuth , isMember} = require('./middleware/authMiddleware')
+
+const app = express();
 //-----------------MONGOOSE CONNECT----------
 
 const mongoose = require('mongoose')
@@ -78,8 +85,8 @@ app.use('/', mainRouter);
 app.use('/register', registerRouter)
 app.use('/log-in', LogInRouter)
 app.use('/log-out',logOutRouter)
-
-
+app.use('/post', isAuth, postRouter)
+app.use('/member', isAuth, membersRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

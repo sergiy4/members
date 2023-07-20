@@ -1,0 +1,10 @@
+extends layout 
+block content 
+  h1 Post: 
+  h2=title
+  p=post.text
+  -if(post.author.status)
+    h4 Author: #{post.author.username}
+    h4 Date: #{post.date_publication}
+  -else
+  
