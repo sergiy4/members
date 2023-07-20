@@ -3,3 +3,14 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  
+  -if(user)
+    a(href='/log-out') Log out 
+    a(href='/post') Create post
+    a(href='/post') Become a member
+  -else 
+    a(href='/register') Sign up 
+    a(href='/log-in') log in
+  
+  //- тут показувати всі пости , і в залежності 
+  //- від прав показувати хто їх написав

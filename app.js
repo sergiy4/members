@@ -2,11 +2,18 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-require('dotenv').config()
-// 
-const indexRouter = require('./routes/index');
-const registerRouter = require('./routes/registerRouter')
 
+const session = require('express-session')
+const MongoStore = require('connect-mongo');
+const passport = require('passport');
+require('dotenv').config()
+
+// routes
+const mainRouter = require('./routes/mainRoute')
+const registerRouter = require('./routes/registerRouter')
+const LogInRouter = require('./routes/authRouter')
+const logOutRouter = require('./routes/logoutRouter')
+var app = express();
 //-----------------MONGOOSE CONNECT----------
 
 const mongoose = require('mongoose')
@@ -19,17 +26,39 @@ const dbOptions = {
 // Wait for database to connect, logging an error if there is a problem
 main().catch((err) => console.log(err));
 
-
-
 async function main() {
   await mongoose.connect(process.env.mongoDB ,dbOptions);
   console.log('connect to mongo DB')
 }
 
+//------------------SESSION SETUP----------
+
+const sessionStore = new MongoStore({
+  mongoUrl: process.env.mongoDB,
+  collectionName:'session'
+})
+
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUnitialized: true,
+    store: sessionStore,
+    cookie:{
+      maxAge: 1000 * 60 * 60 * 24  //1 day
+    }
+  })
+)
+// -----------------PASSPORT---------------
+
+require('./config/passport')
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 //------------------MIDDLEWARE-------------
 
-var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -45,10 +74,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/', indexRouter);
+app.use('/', mainRouter);
 app.use('/register', registerRouter)
-
-
+app.use('/log-in', LogInRouter)
+app.use('/log-out',logOutRouter)
 
 
 

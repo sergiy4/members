@@ -31,6 +31,6 @@ PostSchema.virtual('url').get(function(){
     return `/posts/${this._id}`
 })
 
-const PostModel = mongoose.model('Post',PostModel)
+const PostModel = mongoose.model('Post',PostSchema)
 
 module.exports = PostModel

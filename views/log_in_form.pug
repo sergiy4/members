@@ -1,0 +1,27 @@
+extends layout 
+block content 
+  
+
+  form(action='' method='post')
+    h1=title
+
+    div.oneField
+      label(for='username') Username 
+      input#username(type="text", name="username" required=true value=(undefined === user ? '': user.username))
+      if errors
+        for error in errors
+          if(error.path==='username')
+            p.error_text=error.msg
+            - break
+         
+
+    div.oneField
+      label(for='password') Password
+      input#password(type="password", name="password" required=true )
+      if errors
+        for error in errors
+          if(error.path==='password')
+            p.error_text=error.msg
+            - break
+
+    button.btn.btn-primary(type='submit') Log in
