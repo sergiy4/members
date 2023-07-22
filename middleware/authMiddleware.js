@@ -12,11 +12,21 @@ const isMember = (req, res, next)=>{
     if(req.user.member && req.isAuthenticated()){
         next();
     } else {
+        res.status(401).json({msg:'You are not authorized because you are not member'})
+    }
+}
+
+const isAdmin = (req, res, next)=>{
+    if(req.user.admin &&req.user.member && req.isAuthenticated() ){
+        next();
+    } else {
         res.status(401).json({msg:'You are not authorized because you are not admin'})
     }
 }
 
+
 module.exports = {
     isAuth,
-    isMember
+    isMember,
+    isAdmin
 }

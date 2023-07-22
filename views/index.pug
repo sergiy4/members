@@ -4,10 +4,15 @@ block content
   h1= title
   p Welcome to #{title}
   
-  -if(user)
+  -if(user )
     a(href='/log-out') Log out 
     a(href='/post') Create post
-    a(href='/member') Become a member
+
+    -if(!user.member)
+      a(href='/member') Become a member
+    -else if(!user.admin)
+      a(href='/admin') Become a admin
+
   -else 
     a(href='/register') Sign up 
     a(href='/log-in') log in
@@ -16,8 +21,12 @@ block content
     div.onePost
       h1=post.header 
       h2=post.text  
+
       -if(user && user.member)
         p=post.author.username
         p=post.date_publication
-  //- тут показувати всі пости , і в залежності 
-  //- від прав показувати хто їх написав
+
+        -if(user && user.admin)
+
+          form(method="POST", action=`http://localhost:3000/post/${post._id}/delete` )
+            button.btn(type='submit') Delete

@@ -1,12 +1,13 @@
 extends layout 
 block content 
   
-  -if(user)
+  //- придумати шось
+  if authUser!==undefined
     h1 you are registered
 
     p do you want to log out?
     a(href='/log-out') Log out 
-  -else
+  else
     form(action='' method='post')
       h1=title
 

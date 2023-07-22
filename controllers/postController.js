@@ -4,17 +4,11 @@ const asyncHandler = require('express-async-handler')
 const {body, validationResult} = require('express-validator')
 
 const Post = require('../models/postModel')
-const User = require('../models/userModel')
-const PostModel = require('../models/postModel')
-
-const getAllPosts = asyncHandler(async(req,res,next)=>{
-
-})
 
 const getCurrentPost = asyncHandler(async(req,res,next)=>{
-
-    const post  = await PostModel.findById(req.params.id).populate('author').exec()
-    console.log(post)
+    console.log('here')
+    const post  = await Post.findById(req.params.id).populate('author').exec()
+    
     if(!post){
 
         res.send('Post does not exist').status(404)
@@ -82,16 +76,22 @@ const get_update_post_form = asyncHandler(async(req,res,next)=>{
 
 })
 
-const post_update_post_form  =asyncHandler(async(req, res, next)=>{
+const post_update_post_form  = asyncHandler(async(req, res, next)=>{
 
 })
 
+const delete_post = asyncHandler(async(req,res,next)=>{
+    console.log('HERE')
+    await Post.findByIdAndRemove(req.params.id)
+    res.redirect('/')
+})
 
 Object.assign(module.exports,{
-    getAllPosts,
+
     get_post_form,
     post_post_form,
     get_update_post_form,
     post_update_post_form,
-    getCurrentPost
+    getCurrentPost,
+    delete_post
 })

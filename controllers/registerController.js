@@ -4,10 +4,11 @@ const {body, validationResult} = require('express-validator')
 const bcrypt = require('bcrypt')
 
 const get_register_form = asyncHandler(async(req,res,next)=>{
-    console.log('here')
+    
+    console.log(req.user)
     res.render('register_form',{
         title:'Sign up',
-        user:req.user
+        authUser:req.user
     })
 })
 
@@ -67,8 +68,6 @@ const post_register_form = [
             member: req.body.member
         }
 
-        console.log(errors)
-
         if(!errors.isEmpty()){
 
             res.render('register_form',{
@@ -79,6 +78,7 @@ const post_register_form = [
             return;
 
         } else {
+            
             const hashPwd =await bcrypt.hash(req.body.password, 10);
 
             const newUser = new UserModel({
@@ -87,7 +87,7 @@ const post_register_form = [
             })
 
             await newUser.save();
-            // Перевести до сторінки автентифікації
+            console.log('HERE')
 
             res.redirect('/log-in')
         }

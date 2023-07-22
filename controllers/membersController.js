@@ -16,21 +16,21 @@ const post_members_form = [
         .escape(),
 
     asyncHandler(async(req, res, next)=>{
+        
         const errors = validationResult(req)
 
         if(!errors.isEmpty()){
 
-            
             res.render('become_a_member',{
                 title:'Become a member',
                 errors:errors.array()
             })
+
         } else {
 
             if(req.body.secret === process.env.SECRET_MEMBERS_PASSWORD){               
                 
                 const user = await User.findByIdAndUpdate(req.user._id, {member:true} ).exec()
-               
                 res.redirect('/')
 
             } else {

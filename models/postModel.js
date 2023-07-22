@@ -28,7 +28,7 @@ const PostSchema = new Schema({
 })
 
 PostSchema.virtual('url').get(function(){
-    return `/posts/${this._id}`
+    return `/post/${this._id}`
 })
 
 const PostModel = mongoose.model('Post',PostSchema)

@@ -1,0 +1,14 @@
+extends layout 
+block content 
+  h1=title
+  form(action='' method='post')
+     
+    div.oneField
+      label(for='secret') SECRET PASSWORD 
+      input#secret(type="text", name="secret" required=true )
+      if errors
+        for error in errors
+            p.error_text=error.msg
+            - break
+
+    button.btn.btn-primary(type='submit') Become a admin

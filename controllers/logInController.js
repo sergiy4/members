@@ -1,8 +1,7 @@
 const UserModel = require("../models/userModel");
 const asyncHandler = require('express-async-handler')
 const {body, validationResult} = require('express-validator')
-const bcrypt = require('bcrypt');
-const passport = require("passport");
+
 
 const get_log_in = asyncHandler(async(req, res, next)=>{
 
